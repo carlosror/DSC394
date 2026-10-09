@@ -67,7 +67,7 @@ def train(
             #raise NotImplementedError("Training step not implemented")
             pred = model(img_flat)
             #pred = model(test_images.view(test_images.shape[0], -1))
-            loss_val = loss_func(pred, train_labels.float())
+            loss_val = loss_func(pred,label)
 
             optim.zero_grad()
             loss_val.backward()
