@@ -69,7 +69,7 @@ def train(
             #pred = model(test_images.view(test_images.shape[0], -1))
             loss_val = loss_func(pred,label)
 
-            optim.zero_grad()
+            optimizer.zero_grad()
             loss_val.backward()
             optim.step()
 
