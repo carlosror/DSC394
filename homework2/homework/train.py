@@ -71,7 +71,7 @@ def train(
 
             optimizer.zero_grad()
             loss_val.backward()
-            optim.step()
+            optimizer.step()
 
             global_step += 1
 
