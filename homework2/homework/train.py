@@ -46,6 +46,7 @@ def train(
     # create loss function and optimizer
     loss_func = ClassificationLoss()
     # optimizer = ...
+    optimizer = torch.optim.SGD(model.parameters(), lr=1e-4)
 
     global_step = 0
     metrics = {"train_acc": [], "val_acc": []}
@@ -62,7 +63,13 @@ def train(
             img, label = img.to(device), label.to(device)
 
             # TODO: implement training step
-            raise NotImplementedError("Training step not implemented")
+            #raise NotImplementedError("Training step not implemented")
+            pred = model(train_data.view(train_images.shape[0], -1))[..., 0]
+            loss_val = loss_func(pred, train_labels.float())
+
+            optim.zero_grad()
+            loss_val.backward()
+            optim.step()
 
             global_step += 1
 
