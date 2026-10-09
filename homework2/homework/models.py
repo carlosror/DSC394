@@ -25,7 +25,11 @@ class ClassificationLoss(nn.Module):
         Returns:
             tensor, scalar loss
         """
-        raise NotImplementedError("ClassificationLoss.forward() is not implemented")
+        #raise NotImplementedError("ClassificationLoss.forward() is not implemented")
+        log_probs = torch.nn.functional.log_softmax(logits, dim=1)
+        criterion = nn.NLLLoss()
+        loss = criterion(log_probs, target)
+        return loss
 
 
 class LinearClassifier(nn.Module):
