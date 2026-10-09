@@ -47,7 +47,10 @@ class LinearClassifier(nn.Module):
         """
         super().__init__()
 
-        raise NotImplementedError("LinearClassifier.__init__() is not implemented")
+        #raise NotImplementedError("LinearClassifier.__init__() is not implemented")
+        #super(MultiClassClassifier, self).__init__()
+        self.fc = nn.Linear(h, num_classes, bias=True)
+        #torch.nn.Linear(in_features=size[0] * size[1] * 3, out_features=1)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
@@ -57,7 +60,10 @@ class LinearClassifier(nn.Module):
         Returns:
             tensor (b, num_classes) logits
         """
-        raise NotImplementedError("LinearClassifier.forward() is not implemented")
+        #raise NotImplementedError("LinearClassifier.forward() is not implemented")
+        x = self.fc(x)
+        x = torch.nn.functional.softmax(x, dim=1)
+        return x
 
 
 class MLPClassifier(nn.Module):
