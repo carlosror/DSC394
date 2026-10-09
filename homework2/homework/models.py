@@ -49,7 +49,7 @@ class LinearClassifier(nn.Module):
 
         #raise NotImplementedError("LinearClassifier.__init__() is not implemented")
         #super(MultiClassClassifier, self).__init__()
-        self.fc = nn.Linear(200, num_classes, bias=True)
+        self.fc = nn.Linear(h*w*3, num_classes, bias=True)
         #torch.nn.Linear(in_features=size[0] * size[1] * 3, out_features=1)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
