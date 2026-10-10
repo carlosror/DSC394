@@ -46,7 +46,7 @@ def train(
     # create loss function and optimizer
     loss_func = ClassificationLoss()
     # optimizer = ...
-    optimizer = torch.optim.SGD(model.parameters(), lr=1e-4)
+    optimizer = torch.optim.SGD(model.parameters(), lr=lr)
 
     global_step = 0
     metrics = {"train_acc": [], "val_acc": []}
@@ -71,12 +71,15 @@ def train(
             # TODO: implement training step
             #raise NotImplementedError("Training step not implemented")
             pred = model(img_flat)
-            pred2 = torch.max(pred, dim=1, keepdim=True)[0]
+            max_values, max_indices = torch.max(pred, dim=1)
+            pred2 = max_indices
+            #pred2 = torch.max(pred, dim=1, keepdim=True)[0]
             #print(pred.shape)
             #print(pred2)
             
             #pred = model(test_images.view(test_images.shape[0], -1))
-            accur = ((pred2 > 0.5) == label).float().mean().item()
+            #accur = ((pred2 > 0.5) == label).float().mean().item()
+            accur = (pred2 == label).float().mean().item()
             metrics["train_acc"].append(accur)
             loss_val = loss_func(pred,label)
 
@@ -92,13 +95,18 @@ def train(
 
             for img, label in val_data:
                 img, label = img.to(device), label.to(device)
+                #print(label)
 
                 # TODO: compute validation accuracy
                 #raise NotImplementedError("Validation accuracy not implemented")
                 img_flat = img.view(img.size(0), -1)
                 pred = model(img_flat)
-                pred2 = torch.max(pred, dim=1, keepdim=True)[0]
-                accur_val = ((pred2 > 0.5) == label).float().mean().item()
+                max_values, max_indices = torch.max(pred, dim=1)
+                pred2 = max_indices
+                #pred2 = torch.max(pred, dim=1, keepdim=True)[0]
+                #print(pred2)
+                #accur_val = ((pred2 > 0.5) == label).float().mean().item()
+                accur_val = (pred2 == label).float().mean().item()
                 metrics["val_acc"].append(accur_val)
 
         # log average train and val accuracy to tensorboard
