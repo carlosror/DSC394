@@ -27,6 +27,9 @@ def train(
         print("CUDA not available, using CPU")
         device = torch.device("cpu")
 
+    num_epoch = 10
+    lr = 0.05
+
     # set random seed so each run is deterministic
     torch.manual_seed(seed)
     np.random.seed(seed)
