@@ -72,7 +72,7 @@ def train(
             #raise NotImplementedError("Training step not implemented")
             pred = model(img_flat)
             pred2 = torch.max(pred, dim=1, keepdim=True)[0]
-            print(pred.shape)
+            #print(pred.shape)
             #print(pred2)
             
             #pred = model(test_images.view(test_images.shape[0], -1))
