@@ -63,6 +63,7 @@ def train(
             img, label = img.to(device), label.to(device)
             #img_flat = img.view(1, -1)
             img_flat = img.view(img.size(0), -1)
+            print(img.shape)
             print(img_flat.shape)
 
             # TODO: implement training step
