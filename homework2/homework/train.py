@@ -66,7 +66,10 @@ def train(
             # TODO: implement training step
             #raise NotImplementedError("Training step not implemented")
             pred = model(img_flat)
+            print(pred)
             #pred = model(test_images.view(test_images.shape[0], -1))
+            accur = ((pred > 0.5) == label).float().mean().item()
+            metrics["train_acc"].append(accur)
             loss_val = loss_func(pred,label)
 
             optimizer.zero_grad()
@@ -83,13 +86,19 @@ def train(
                 img, label = img.to(device), label.to(device)
 
                 # TODO: compute validation accuracy
-                raise NotImplementedError("Validation accuracy not implemented")
+                #raise NotImplementedError("Validation accuracy not implemented")
+                img_flat = img.view(img.size(0), -1)
+                pred = model(img_flat)
+                accur_val = ((pred > 0.5) == label).float().mean().item()
+                metrics["val_acc"].append(accur_val)
 
         # log average train and val accuracy to tensorboard
         epoch_train_acc = torch.as_tensor(metrics["train_acc"]).mean()
         epoch_val_acc = torch.as_tensor(metrics["val_acc"]).mean()
 
-        raise NotImplementedError("Logging not implemented")
+        #raise NotImplementedError("Logging not implemented")
+        logger.add_tensor('train_accuracy', epoch_train_acc, epoch)
+        logger.add_tensor('val_accuracy', epoch_val_acc, epoch)
 
         # print on first, last, every 10th epoch
         if epoch == 0 or epoch == num_epoch - 1 or (epoch + 1) % 10 == 0:
