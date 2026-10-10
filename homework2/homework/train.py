@@ -62,6 +62,7 @@ def train(
         for img, label in train_data:
             img, label = img.to(device), label.to(device)
             img_flat = img.view(1, -1)
+            print(img_flat)
 
             # TODO: implement training step
             #raise NotImplementedError("Training step not implemented")
