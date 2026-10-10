@@ -63,15 +63,20 @@ def train(
             img, label = img.to(device), label.to(device)
             #img_flat = img.view(1, -1)
             img_flat = img.view(img.size(0), -1)
-            print(img.shape)
-            print(img_flat.shape)
+            #img_flat = img.view(img.size(0), -1)
+            #print("img.shape:", str(img.shape))
+            #print("label.shape:", str(label.shape))
+            #print(img_flat.shape)
 
             # TODO: implement training step
             #raise NotImplementedError("Training step not implemented")
             pred = model(img_flat)
-            print(pred)
+            pred2 = torch.max(pred, dim=1, keepdim=True)[0]
+            print(pred.shape)
+            #print(pred2)
+            
             #pred = model(test_images.view(test_images.shape[0], -1))
-            accur = ((pred > 0.5) == label).float().mean().item()
+            accur = ((pred2 > 0.5) == label).float().mean().item()
             metrics["train_acc"].append(accur)
             loss_val = loss_func(pred,label)
 
@@ -92,7 +97,8 @@ def train(
                 #raise NotImplementedError("Validation accuracy not implemented")
                 img_flat = img.view(img.size(0), -1)
                 pred = model(img_flat)
-                accur_val = ((pred > 0.5) == label).float().mean().item()
+                pred2 = torch.max(pred, dim=1, keepdim=True)[0]
+                accur_val = ((pred2 > 0.5) == label).float().mean().item()
                 metrics["val_acc"].append(accur_val)
 
         # log average train and val accuracy to tensorboard
