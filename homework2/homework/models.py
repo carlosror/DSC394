@@ -9,8 +9,8 @@ but remember that the grader will assume the default constructor!
 from pathlib import Path
 
 import torch
-import torch.nn as nn
-
+import torch.nn as nn 
+from typing import List, Union
 
 class ClassificationLoss(nn.Module):
     def forward(self, logits: torch.Tensor, target: torch.LongTensor) -> torch.Tensor:
@@ -134,6 +134,8 @@ class MLPClassifierDeep(nn.Module):
         h: int = 64,
         w: int = 64,
         num_classes: int = 6,
+        num_layers: int = 4,
+        hidden_dim: int = 128,
     ):
         """
         An MLP with multiple hidden layers
@@ -149,7 +151,21 @@ class MLPClassifierDeep(nn.Module):
         """
         super().__init__()
 
-        raise NotImplementedError("MLPClassifierDeep.__init__() is not implemented")
+        #raise NotImplementedError("MLPClassifierDeep.__init__() is not implemented")
+        layers = []
+        n_in = h * w * 3
+
+        # Dynamically add the specified number of hidden layers
+        for _ in range(num_layers):
+            layers.append(nn.Linear(n_in, hidden_dim))
+            layers.append(nn.ReLU())
+            n_in = hidden_dim  # The input size for the next layer becomes hidden_dim
+
+        # Add the final output layer mapping to num_classes
+        layers.append(nn.Linear(n_in, num_classes))
+
+        # Combine all layers into a sequential container
+        self.network = nn.Sequential(*layers)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
@@ -159,7 +175,9 @@ class MLPClassifierDeep(nn.Module):
         Returns:
             tensor (b, num_classes) logits
         """
-        raise NotImplementedError("MLPClassifierDeep.forward() is not implemented")
+        #raise NotImplementedError("MLPClassifierDeep.forward() is not implemented")
+        x = x.flatten(1)
+        return self.network(x)
 
 
 class MLPClassifierDeepResidual(nn.Module):
