@@ -35,7 +35,8 @@ def train(
     np.random.seed(seed)
 
     # directory with timestamp to save tensorboard logs and model checkpoints
-    log_dir = Path(exp_dir) / f"{model_name}_{datetime.now().strftime('%m%d_%H%M%S')}"
+    #log_dir = Path(exp_dir) / f"{model_name}_{datetime.now().strftime('%m%d_%H%M%S')}"
+    log_dir = Path(exp_dir) / f"{model_name}"
     logger = tb.SummaryWriter(log_dir)
 
     # note: the grader uses default kwargs, you'll have to bake them in for the final submission
@@ -49,7 +50,7 @@ def train(
     # create loss function and optimizer
     loss_func = ClassificationLoss()
     # optimizer = ...
-    optimizer = torch.optim.SGD(model.parameters(), lr=lr)
+    optimizer = torch.optim.SGD(model.parameters(), lr=.05)
 
     global_step = 0
     metrics = {"train_acc": [], "val_acc": []}

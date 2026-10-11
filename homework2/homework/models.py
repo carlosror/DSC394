@@ -61,9 +61,14 @@ class LinearClassifier(nn.Module):
             tensor (b, num_classes) logits
         """
         #raise NotImplementedError("LinearClassifier.forward() is not implemented")
-        x = self.fc(x)
-        x = torch.nn.functional.softmax(x, dim=1)
-        return x
+        # 1. Flatten the image from (batch, 3, H, W) to (batch, 3 * H * W)
+        x = x.flatten(start_dim=1)  # Alternatively: x.view(x.size(0), -1)
+        
+        # 2. Pass through the linear layer (computes xW^T + b automatically)
+        logits = self.fc(x)
+        #x = self.fc(x)
+        x = torch.nn.functional.softmax(logits, dim=1)
+        return logits
 
 
 class MLPClassifier(nn.Module):
